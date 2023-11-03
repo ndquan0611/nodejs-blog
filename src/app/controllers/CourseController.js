@@ -29,7 +29,7 @@ class CourseController {
             .then(() => {
                 res.redirect('/admin/stored/courses');
             })
-            .catch(() => {});
+            .catch(next);
     }
 
     // [GET] /courses/edit/:id

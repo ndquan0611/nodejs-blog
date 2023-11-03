@@ -4,7 +4,15 @@ const { mutipleMongooseToObject } = require('../../utils/mongoose');
 class AdminController {
     // [GET] /admin/stored/courses
     storedCourses(req, res, next) {
-        Promise.all([Course.find({}), Course.findDeleted({})])
+        let courseQuery = Course.find({});
+
+        if (req.query.hasOwnProperty('_sort')) {
+            courseQuery = courseQuery.sort({
+                [req.query.column]: req.query.type,
+            });
+        }
+
+        Promise.all([courseQuery, Course.findDeleted({})])
             .then(([courses, deletedCount]) => {
                 res.render('admin/stored-courses', {
                     courses: mutipleMongooseToObject(courses),
